@@ -8,7 +8,7 @@ import sys
 import zipfile
 import argparse
 
-def create_submission_zip(mssv="20240001", hoten="NguyenVanA"):
+def create_submission_zip(mssv="29219152253", hoten="LuongNguyenHoang"):
     base_dir = os.path.dirname(os.path.abspath(__file__))
     zip_filename = f"{mssv}_{hoten}_LabQLThuVien.zip"
     zip_filepath = os.path.join(base_dir, zip_filename)
@@ -67,8 +67,8 @@ def create_submission_zip(mssv="20240001", hoten="NguyenVanA"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Đóng gói bài Lab Quản lý Thư viện")
-    parser.add_argument("--mssv", default="20240001", help="Mã số sinh viên của bạn")
-    parser.add_argument("--hoten", default="NguyenVanA", help="Họ và tên viết liền không dấu")
+    parser.add_argument("--mssv", default="29219152253", help="Mã số sinh viên của bạn")
+    parser.add_argument("--hoten", default="LuongNguyenHoang", help="Họ và tên viết liền không dấu")
     args = parser.parse_args()
 
     create_submission_zip(args.mssv, args.hoten)

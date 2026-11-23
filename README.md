@@ -23,7 +23,7 @@ Dự án được xây dựng toàn diện từ khâu phân tích bài toán, th
 ## 📁 Cấu Trúc Dự Án
 
 ```
-Lab_QLThuVien_[MSSV]_[HoTen]/
+Lab_QLThuVien_29219152253_LuongNguyenHoang/
 │
 ├── BaoCao_Lab.md             # Báo cáo phân tích & thiết kế hoàn chỉnh (Mermaid diagrams, Use case, ERD, Test cases)
 ├── README.md                 # Tài liệu hướng dẫn sử dụng và khởi chạy
@@ -89,11 +89,10 @@ Theo yêu cầu của đề bài thực hành, sinh viên cần nộp file nén 
 Dự án đã tích hợp sẵn script tự động:
 1. Chạy lệnh:
    ```bash
-   python package_zip.py --mssv "20240001" --hoten "NguyenVanA"
+   python package_zip.py --mssv "29219152253" --hoten "LuongNguyenHoang"
    ```
-   *(Thay thế `"20240001"` và `"NguyenVanA"` bằng MSSV và Họ tên thực tế của bạn)*
 2. File zip hoàn chỉnh sẽ được tạo ra ngay trong thư mục:
-   `20240001_NguyenVanA_LabQLThuVien.zip`
+   `29219152253_LuongNguyenHoang_LabQLThuVien.zip`
 
 ---
 
