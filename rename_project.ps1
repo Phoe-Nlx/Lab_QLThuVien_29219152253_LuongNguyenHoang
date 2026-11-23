@@ -1,6 +1,6 @@
 ﻿param (
-    [string]$mssv = "20240001",
-    [string]$hoten = "NguyenVanA"
+    [string]$mssv = "29211555052",
+    [string]$hoten = "NguyenTranVanManh"
 )
 
 $baseDir = $PSScriptRoot
@@ -13,7 +13,7 @@ Write-Host "==========================================================" -Foregro
 # Cập nhật thông tin trong BaoCao_Lab.md
 $baoCaoPath = Join-Path $baseDir "BaoCao_Lab.md"
 if (Test-Path $baoCaoPath) {
-    (Get-Content -Path $baoCaoPath -Raw -Encoding UTF8) -replace '20240001', $mssv -replace 'Nguyễn Văn A', $hoten | Set-Content -Path $baoCaoPath -Encoding UTF8
+    (Get-Content -Path $baoCaoPath -Raw -Encoding UTF8) -replace '29211555052', $mssv -replace 'Nguyễn Trần Văn Mạnh', $hoten | Set-Content -Path $baoCaoPath -Encoding UTF8
     Write-Host " + Đã cập nhật BaoCao_Lab.md" -ForegroundColor Green
 }
 

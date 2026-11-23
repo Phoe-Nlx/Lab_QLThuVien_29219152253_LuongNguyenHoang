@@ -6,11 +6,11 @@
 ### THÔNG TIN CHUNG
 - **Môn học:** Phát triển Ứng dụng & Kỹ nghệ Phần mềm với Công cụ AI
 - **Thời lượng thực hành:** 120 phút
-- **Họ và tên sinh viên:** Lương Nguyễn Hoàng
-- **Mã số sinh viên (MSSV):** 29219152253
+- **Họ và tên sinh viên:** Nguyễn Trần Văn Mạnh
+- **Mã số sinh viên (MSSV):** 29211555052
 - **Lớp / Khóa:** K21 - Khoa Công nghệ Thông tin
 - **Môi trường & Công cụ:** Google AI Studio (Gemini 1.5/2.0 Flash), Antigravity IDE, Python 3, SQLite 3, HTML5/CSS3/JavaScript SPA.
-- **Kho lưu trữ (Repository / Git):** `https://github.com/Phoe-Nlx/Lab_QLThuVien_29219152253_LuongNguyenHoang`
+- **Kho lưu trữ (Repository / Git):** `https://github.com/Phoe-Nlx/Lab_QLThuVien_29211555052_NguyenTranVanManh`
 
 ---
 
@@ -381,7 +381,7 @@ Các kỹ thuật Prompting đã áp dụng:
 
 ### 6.1. Cấu trúc Mã nguồn Ứng dụng
 ```
-Lab_QLThuVien_[MSSV]_[HoTen]/
+Lab_QLThuVien_29211555052_NguyenTranVanManh/
 │
 ├── BaoCao_Lab.md             # Báo cáo phân tích, thiết kế & kiểm thử chi tiết
 ├── README.md                 # Hướng dẫn cài đặt và khởi chạy nhanh
