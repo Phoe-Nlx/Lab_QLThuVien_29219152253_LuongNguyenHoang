@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hệ Thống Quản Lý Thư Viện Ứng Dụng AI</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- SweetAlert2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-2">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <i class="bi bi-book-half text-primary fs-3"></i>
+        <span>SmartLib <span class="badge bg-primary text-white fs-6 ms-1">AI 2.0</span></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1 ms-lg-3">
+          <li class="nav-item">
+            <a class="nav-link active" data-tab="dashboard" href="#dashboard"><i class="bi bi-speedometer2 me-1"></i> Tổng Quan</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-tab="books" href="#books"><i class="bi bi-journal-bookmark me-1"></i> Quản Lý Sách</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-tab="readers" href="#readers"><i class="bi bi-people me-1"></i> Quản Lý Độc Giả</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-tab="borrows" href="#borrows"><i class="bi bi-arrow-left-right me-1"></i> Mượn & Trả Sách</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-tab="ai-chat" href="#ai-chat"><i class="bi bi-robot text-warning me-1"></i> Trợ Lý AI Gemini</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-tab="settings" href="#settings"><i class="bi bi-gear me-1"></i> Cài Đặt</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center gap-3">
+          <span class="text-light small d-none d-md-inline" id="ai-status-badge">
+            <i class="bi bi-cpu text-info me-1"></i> Google AI Studio Ready
+          </span>
+          <button class="btn btn-sm btn-outline-light" onclick="openBorrowModal()">
+            <i class="bi bi-plus-circle me-1"></i> Lập Phiếu Mượn
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="container-fluid px-4 py-4">
+
+    <!-- ================= TAB: DASHBOARD ================= -->
+    <section id="tab-dashboard" class="tab-content-section">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h4 class="fw-bold mb-1">Bảng Điều Khiển & Thống Kê Thư Viện</h4>
+          <p class="text-muted small mb-0">Hệ thống thông tin quản lý thư viện tích hợp Trí tuệ nhân tạo (Google AI Studio & Antigravity IDE)</p>
+        </div>
+        <button class="btn btn-outline-primary btn-sm" onclick="loadDashboard()">
+          <i class="bi bi-arrow-clockwise me-1"></i> Làm mới dữ liệu
+        </button>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="stat-card d-flex align-items-center justify-content-between">
+            <div>
+              <p class="text-muted small mb-1">Tổng Số Đầu Sách</p>
+              <h3 class="fw-bold mb-0" id="stat-titles">0</h3>
+              <small class="text-primary fw-medium" id="stat-copies">0 bản sao</small>
+            </div>
+            <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+              <i class="bi bi-book"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="stat-card d-flex align-items-center justify-content-between">
+            <div>
+              <p class="text-muted small mb-1">Bản Sao Có Sẵn</p>
+              <h3 class="fw-bold text-success mb-0" id="stat-available">0</h3>
+              <small class="text-muted" id="stat-borrowed">Đang mượn: 0</small>
+            </div>
+            <div class="stat-icon bg-success bg-opacity-10 text-success">
+              <i class="bi bi-check-circle"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="stat-card d-flex align-items-center justify-content-between">
+            <div>
+              <p class="text-muted small mb-1">Độc Giả Đăng Ký</p>
+              <h3 class="fw-bold text-info mb-0" id="stat-readers">0</h3>
+              <small class="text-muted">Sinh viên & Giảng viên</small>
+            </div>
+            <div class="stat-icon bg-info bg-opacity-10 text-info">
+              <i class="bi bi-person-badge"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="stat-card d-flex align-items-center justify-content-between">
+            <div>
+              <p class="text-muted small mb-1">Cảnh Báo Quá Hạn</p>
+              <h3 class="fw-bold text-danger mb-0" id="stat-overdue">0</h3>
+              <small class="text-danger fw-medium">Cần xử lý phạt trễ hạn</small>
+            </div>
+            <div class="stat-icon bg-danger bg-opacity-10 text-danger">
+              <i class="bi bi-exclamation-triangle"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts & Recent Activity -->
+      <div class="row g-4">
+        <div class="col-12 col-lg-7">
+          <div class="card border-0 shadow-sm rounded-3 p-3 h-100">
+            <h6 class="fw-bold mb-3 d-flex align-items-center gap-2">
+              <i class="bi bi-pie-chart text-primary"></i> Phân Bố Sách Theo Thể Loại
+            </h6>
+            <div style="height: 280px; position: relative;">
+              <canvas id="categoryChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-5">
+          <div class="card border-0 shadow-sm rounded-3 p-3 h-100">
+            <h6 class="fw-bold mb-3 d-flex align-items-center gap-2">
+              <i class="bi bi-clock-history text-secondary"></i> Nhật Ký Hoạt Động Gần Đây
+            </h6>
+            <div class="list-group list-group-flush" id="recent-logs-list">
+              <div class="text-center text-muted py-4">Đang tải nhật ký...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB: QUẢN LÝ SÁCH ================= -->
+    <section id="tab-books" class="tab-content-section d-none">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+          <h4 class="fw-bold mb-1">Kho Sách & Tài Liệu Thư Viện</h4>
+          <p class="text-muted small mb-0">Quản lý danh mục đầu sách, số lượng tồn kho và hỗ trợ AI tóm tắt nội dung</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary" onclick="openAddBookModal()">
+            <i class="bi bi-plus-lg me-1"></i> Thêm Sách Mới
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="card border-0 shadow-sm p-3 mb-3">
+        <div class="row g-2 align-items-center">
+          <div class="col-12 col-md-5">
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control" id="search-book-input" placeholder="Tìm kiếm theo Tên sách, Tác giả, ISBN..." oninput="debounceSearchBooks()">
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <select class="form-select" id="filter-book-category" onchange="loadBooks()">
+              <option value="">-- Tất cả thể loại --</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-3 text-end">
+            <span class="text-muted small" id="books-count-label">Hiển thị: 0 sách</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Books Table -->
+      <div class="table-responsive custom-table shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th style="width: 120px;">Mã ISBN</th>
+              <th>Tên Sách & Tác Giả</th>
+              <th>Thể Loại</th>
+              <th class="text-center">Vị Trí Kệ</th>
+              <th class="text-center">Khả Dụng</th>
+              <th class="text-center">Trạng Thái</th>
+              <th class="text-end" style="width: 150px;">Thao Tác</th>
+            </tr>
+          </thead>
+          <tbody id="books-table-body">
+            <tr><td colspan="7" class="text-center py-4">Đang tải danh sách sách...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= TAB: QUẢN LÝ ĐỘC GIẢ ================= -->
+    <section id="tab-readers" class="tab-content-section d-none">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+          <h4 class="fw-bold mb-1">Quản Lý Thẻ & Hồ Sơ Độc Giả</h4>
+          <p class="text-muted small mb-0">Theo dõi thông tin bạn đọc, phân quyền sinh viên và giảng viên</p>
+        </div>
+        <button class="btn btn-primary" onclick="openAddReaderModal()">
+          <i class="bi bi-person-plus me-1"></i> Thêm Độc Giả Mới
+        </button>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="card border-0 shadow-sm p-3 mb-3">
+        <div class="row g-2 align-items-center">
+          <div class="col-12 col-md-6">
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control" id="search-reader-input" placeholder="Tìm theo Tên, Số thẻ, SĐT, Email..." oninput="debounceSearchReaders()">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Readers Table -->
+      <div class="table-responsive custom-table shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Số Thẻ</th>
+              <th>Họ Và Tên</th>
+              <th>Đối Tượng</th>
+              <th>Liên Hệ (SĐT / Email)</th>
+              <th>Địa Chỉ</th>
+              <th class="text-center">Trạng Thái</th>
+              <th class="text-end">Thao Tác</th>
+            </tr>
+          </thead>
+          <tbody id="readers-table-body">
+            <tr><td colspan="7" class="text-center py-4">Đang tải danh sách độc giả...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= TAB: QUẢN LÝ MƯỢN TRẢ ================= -->
+    <section id="tab-borrows" class="tab-content-section d-none">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+          <h4 class="fw-bold mb-1">Theo Dõi Nghiệp Vụ Mượn & Trả Sách</h4>
+          <p class="text-muted small mb-0">Kiểm soát thời hạn mượn, tính phí phạt trễ hạn tự động và gia hạn sách</p>
+        </div>
+        <button class="btn btn-primary" onclick="openBorrowModal()">
+          <i class="bi bi-plus-circle me-1"></i> Lập Phiếu Mượn Mới
+        </button>
+      </div>
+
+      <!-- Status Filter Tabs -->
+      <div class="d-flex gap-2 mb-3">
+        <button class="btn btn-sm btn-outline-secondary active borrow-filter-btn" data-status="" onclick="filterBorrows('')">Tất Cả</button>
+        <button class="btn btn-sm btn-outline-warning borrow-filter-btn" data-status="BORROWING" onclick="filterBorrows('BORROWING')">Đang Mượn</button>
+        <button class="btn btn-sm btn-outline-danger borrow-filter-btn" data-status="OVERDUE" onclick="filterBorrows('OVERDUE')">Quá Hạn</button>
+        <button class="btn btn-sm btn-outline-success borrow-filter-btn" data-status="RETURNED" onclick="filterBorrows('RETURNED')">Đã Trả</button>
+      </div>
+
+      <!-- Borrows Table -->
+      <div class="table-responsive custom-table shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Mã Phiếu</th>
+              <th>Độc Giả</th>
+              <th>Sách Đang Mượn</th>
+              <th>Ngày Mượn</th>
+              <th>Hạn Trả</th>
+              <th class="text-center">Tình Trạng</th>
+              <th class="text-end">Phạt Trễ Hạn</th>
+              <th class="text-end" style="width: 200px;">Thao Tác</th>
+            </tr>
+          </thead>
+          <tbody id="borrows-table-body">
+            <tr><td colspan="8" class="text-center py-4">Đang tải phiếu mượn...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= TAB: TRỢ LÝ AI GEMINI ================= -->
+    <section id="tab-ai-chat" class="tab-content-section d-none">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h4 class="fw-bold mb-1 d-flex align-items-center gap-2">
+                <i class="bi bi-robot text-primary"></i> Trợ Lý Ảo Thư Viện AI
+              </h4>
+              <p class="text-muted small mb-0">Ứng dụng mô hình Gemini qua Google AI Studio: Gợi ý học tập, tra cứu vị trí sách và giải đáp quy chế</p>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary" onclick="clearAIChat()">
+              <i class="bi bi-trash me-1"></i> Xóa đoạn chat
+            </button>
+          </div>
+
+          <div class="chat-container shadow-sm mb-3">
+            <div class="chat-messages" id="chat-messages-box">
+              <div class="chat-bubble ai">
+                <div class="source-tag"><i class="bi bi-stars"></i> Smart Library AI</div>
+                Xin chào bạn! Mình là Trợ lý AI Thông minh của Thư viện. Bạn cần tìm sách gì, muốn gợi ý tài liệu học tập theo ngành, hay cần hỏi về quy chế mượn trả và mức phạt trễ hạn? Hãy hỏi mình nhé!
+              </div>
+            </div>
+
+            <!-- Suggestion Chips -->
+            <div class="px-3 py-2 bg-light border-top d-flex gap-2 flex-wrap">
+              <span class="badge bg-white text-dark border cursor-pointer p-2" onclick="sendQuickPrompt('Gợi ý cho mình các cuốn sách hay về Lập trình và Công nghệ thông tin có sẵn trong kho?')">💡 Sách Lập trình & CNTT</span>
+              <span class="badge bg-white text-dark border cursor-pointer p-2" onclick="sendQuickPrompt('Thời hạn mượn sách đối với sinh viên và giảng viên quy định như thế nào?')">⏱️ Quy định thời hạn mượn</span>
+              <span class="badge bg-white text-dark border cursor-pointer p-2" onclick="sendQuickPrompt('Nếu trả sách trễ hạn thì phí phạt tính thế nào?')">⚠️ Mức phạt trễ hạn</span>
+              <span class="badge bg-white text-dark border cursor-pointer p-2" onclick="sendQuickPrompt('Cuốn sách Clean Code nằm ở kệ nào và còn sách không?')">📍 Vị trí sách Clean Code</span>
+            </div>
+
+            <!-- Input Box -->
+            <div class="p-3 bg-white border-top">
+              <form id="ai-chat-form" onsubmit="handleSendAIMessage(event)" class="d-flex gap-2">
+                <input type="text" class="form-control" id="ai-message-input" placeholder="Nhập câu hỏi của bạn cho Trợ lý Thư viện AI..." required>
+                <button type="submit" class="btn btn-primary px-4" id="ai-send-btn">
+                  <i class="bi bi-send-fill me-1"></i> Gửi
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB: CÀI ĐẶT ================= -->
+    <section id="tab-settings" class="tab-content-section d-none">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+          <div class="card border-0 shadow-sm rounded-3 p-4 mb-4">
+            <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+              <i class="bi bi-key-fill text-warning"></i> Cấu Hình Google AI Studio (Gemini API)
+            </h5>
+            <p class="text-muted small">
+              Nhập API Key tạo từ <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a> để kích hoạt trí tuệ nhân tạo Gemini 1.5/2.0 Flash thực tế. Nếu không nhập, hệ thống sẽ tự động dùng Bộ máy Quy tắc suy diễn AI cục bộ (Offline Rule Engine) để demo mượt mà.
+            </p>
+            <div class="mb-3">
+              <label class="form-label fw-medium">Google Gemini API Key:</label>
+              <input type="password" class="form-control" id="gemini-api-key-input" placeholder="AIzaSy...">
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-primary" onclick="saveApiKey()">
+                <i class="bi bi-check2-circle me-1"></i> Lưu API Key
+              </button>
+              <button class="btn btn-outline-secondary" onclick="testApiKey()">
+                <i class="bi bi-lightning-charge me-1"></i> Kiểm Tra Kết Nối AI
+              </button>
+            </div>
+          </div>
+
+          <div class="card border-0 shadow-sm rounded-3 p-4">
+            <h5 class="fw-bold mb-3 text-danger d-flex align-items-center gap-2">
+              <i class="bi bi-arrow-counterclockwise"></i> Khôi Phục Dữ Liệu Mẫu
+            </h5>
+            <p class="text-muted small">
+              Nếu bạn muốn nạp lại dữ liệu sách, độc giả và phiếu mượn chuẩn phục vụ cho buổi thuyết trình hoặc chấm bài thực hành:
+            </p>
+            <button class="btn btn-outline-danger" onclick="confirmResetDatabase()">
+              <i class="bi bi-database-fill-exclamation me-1"></i> Nạp Lại Dữ Liệu Mẫu Chuẩn
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Modal: Thêm / Sửa Sách -->
+  <div class="modal fade" id="bookModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="bookModalTitle">Thêm Sách Mới</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="bookForm" onsubmit="handleSaveBook(event)">
+          <div class="modal-body">
+            <input type="hidden" id="book-edit-id">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-medium">Mã ISBN <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="book-isbn" required placeholder="Ví dụ: 978-604-01">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-medium">Thể Loại</label>
+                <select class="form-select" id="book-category" required></select>
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-medium">Tên Sách <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="book-title" required placeholder="Nhập tên đầu sách">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-medium">Tác Giả <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="book-author" required placeholder="Tên tác giả">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label fw-medium">Năm XB</label>
+                <input type="number" class="form-control" id="book-year" value="2024">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label fw-medium">Tổng Bản Sao</label>
+                <input type="number" class="form-control" id="book-copies" value="5" min="1" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-medium">Nhà Xuất Bản</label>
+                <input type="text" class="form-control" id="book-publisher" placeholder="Ví dụ: NXB Trẻ, Pearson...">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-medium">Vị Trí Kệ Sách</label>
+                <input type="text" class="form-control" id="book-location" placeholder="Ví dụ: Kệ A1 - Ngăn 2">
+              </div>
+              <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label class="form-label fw-medium mb-0">Tóm Tắt Nội Dung Sách</label>
+                  <button type="button" class="btn btn-sm btn-outline-primary" onclick="autoGenerateSummaryAI()">
+                    <i class="bi bi-stars text-warning me-1"></i> AI Tóm Tắt Tự Động
+                  </button>
+                </div>
+                <textarea class="form-control" id="book-summary" rows="3" placeholder="Mô tả nội dung, giá trị cuốn sách hoặc nhấn nút 'AI Tóm Tắt Tự Động'"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-primary" id="save-book-btn">Lưu Sách</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Thêm / Sửa Độc Giả -->
+  <div class="modal fade" id="readerModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="readerModalTitle">Đăng Ký Độc Giả Mới</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="readerForm" onsubmit="handleSaveReader(event)">
+          <div class="modal-body">
+            <input type="hidden" id="reader-edit-id">
+            <div class="mb-3">
+              <label class="form-label fw-medium">Số Thẻ Độc Giả <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="reader-card" required placeholder="Ví dụ: DG007">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-medium">Họ Và Tên <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="reader-name" required placeholder="Nguyễn Văn A">
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label fw-medium">Đối Tượng</label>
+                <select class="form-select" id="reader-type">
+                  <option value="SINH_VIEN">Sinh Viên</option>
+                  <option value="GIANG_VIEN">Giảng Viên</option>
+                  <option value="NGHIEN_CUU_SINH">Nghiên Cứu Sinh</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-medium">Giới Tính</label>
+                <select class="form-select" id="reader-gender">
+                  <option value="Nam">Nam</option>
+                  <option value="Nữ">Nữ</option>
+                  <option value="Khác">Khác</option>
+                </select>
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label fw-medium">Số Điện Thoại</label>
+                <input type="tel" class="form-control" id="reader-phone" placeholder="0901234567">
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-medium">Email</label>
+                <input type="email" class="form-control" id="reader-email" placeholder="example@university.edu.vn">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-medium">Địa Chỉ / Đơn Vị</label>
+              <input type="text" class="form-control" id="reader-address" placeholder="Khoa CNTT, Ký túc xá...">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-primary">Lưu Độc Giả</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Lập Phiếu Mượn Sách -->
+  <div class="modal fade" id="borrowModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">Lập Phiếu Mượn Sách Mới</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="borrowForm" onsubmit="handleCreateBorrow(event)">
+          <div class="modal-body">
+            <div class="row g-3 mb-3">
+              <div class="col-md-7">
+                <label class="form-label fw-medium">Chọn Độc Giả <span class="text-danger">*</span></label>
+                <select class="form-select" id="borrow-reader-select" required>
+                  <option value="">-- Chọn độc giả mượn sách --</option>
+                </select>
+              </div>
+              <div class="col-md-5">
+                <label class="form-label fw-medium">Thời Hạn Mượn</label>
+                <select class="form-select" id="borrow-due-days">
+                  <option value="7">7 Ngày</option>
+                  <option value="14" selected>14 Ngày (Quy chuẩn Sinh viên)</option>
+                  <option value="30">30 Ngày (Giảng viên / Nghiên cứu)</option>
+                </select>
+              </div>
+            </div>
+
+            <label class="form-label fw-medium mb-1">Chọn Sách Cần Mượn (Tối đa 3 cuốn/lần đối với SV):</label>
+            <div class="border rounded p-2 mb-3 bg-light" style="max-height: 220px; overflow-y: auto;" id="borrow-books-checklist">
+              <div class="text-center text-muted py-3">Đang tải danh sách sách có sẵn...</div>
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label fw-medium">Ghi Chú Phiếu Mượn</label>
+              <input type="text" class="form-control" id="borrow-notes" placeholder="Mượn phục vụ nghiên cứu, học tập...">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-primary" id="submit-borrow-btn">
+              <i class="bi bi-check-circle me-1"></i> Xác Nhận Tạo Phiếu Mượn
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Xem Chi Tiết Sách & Tóm Tắt AI -->
+  <div class="modal fade" id="bookDetailModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="detail-title">Chi Tiết Sách</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-1"><strong>Tác giả:</strong> <span id="detail-author"></span></p>
+          <p class="mb-1"><strong>Thể loại:</strong> <span id="detail-category" class="badge bg-secondary"></span></p>
+          <p class="mb-1"><strong>Vị trí kệ sách:</strong> <span id="detail-location" class="text-primary fw-medium"></span></p>
+          <p class="mb-1"><strong>Số lượng trong kho:</strong> <span id="detail-copies"></span></p>
+          <hr>
+          <h6 class="fw-bold d-flex align-items-center gap-1">
+            <i class="bi bi-stars text-warning"></i> Tóm Tắt & Giá Trị Cuốn Sách:
+          </h6>
+          <p class="text-muted small" id="detail-summary" style="line-height: 1.6;"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
