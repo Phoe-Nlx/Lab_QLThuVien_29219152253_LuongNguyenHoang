@@ -6,11 +6,11 @@
 ### THÔNG TIN CHUNG
 - **Môn học:** Phát triển Ứng dụng & Kỹ nghệ Phần mềm với Công cụ AI
 - **Thời lượng thực hành:** 120 phút
-- **Họ và tên sinh viên:** Nguyễn Văn A *(Sinh viên cập nhật họ tên)*
-- **Mã số sinh viên (MSSV):** 20240001 *(Sinh viên cập nhật MSSV)*
+- **Họ và tên sinh viên:** Lương Nguyễn Hoàng
+- **Mã số sinh viên (MSSV):** 29219152253
 - **Lớp / Khóa:** K21 - Khoa Công nghệ Thông tin
 - **Môi trường & Công cụ:** Google AI Studio (Gemini 1.5/2.0 Flash), Antigravity IDE, Python 3, SQLite 3, HTML5/CSS3/JavaScript SPA.
-- **Kho lưu trữ (Repository / Git):** `https://github.com/[MSSV]_[HoTen]/Lab_QLThuVien`
+- **Kho lưu trữ (Repository / Git):** `https://github.com/Phoe-Nlx/Lab_QLThuVien`
 
 ---
 
