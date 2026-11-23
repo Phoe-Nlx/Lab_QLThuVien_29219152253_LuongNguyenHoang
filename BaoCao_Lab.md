@@ -10,7 +10,7 @@
 - **Mã số sinh viên (MSSV):** 29219152253
 - **Lớp / Khóa:** K21 - Khoa Công nghệ Thông tin
 - **Môi trường & Công cụ:** Google AI Studio (Gemini 1.5/2.0 Flash), Antigravity IDE, Python 3, SQLite 3, HTML5/CSS3/JavaScript SPA.
-- **Kho lưu trữ (Repository / Git):** `https://github.com/Phoe-Nlx/Lab_QLThuVien`
+- **Kho lưu trữ (Repository / Git):** `https://github.com/Phoe-Nlx/Lab_QLThuVien_29219152253_LuongNguyenHoang`
 
 ---
 
